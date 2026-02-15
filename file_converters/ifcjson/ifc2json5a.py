@@ -115,8 +115,11 @@ class IFC2JSON5a(common.IFC2JSON):
         jsonObjects = []
 
         for entity in self.ifcModel.by_type('IfcObjectDefinition'):
-            self.rootObjects[entity.id()] = guid.split(
-                guid.expand(entity.GlobalId))[1:-1]
+            guidValue = guid.split(
+                guid.expand(entity.GlobalId))
+            if guidValue[0] == '{' and guidValue[-1] == '}':
+                guidValue = guidValue[1:-1]
+            self.rootObjects[entity.id()] = guidValue
 
         for key in self.rootObjects:
             entity = self.ifcModel.by_id(key)
